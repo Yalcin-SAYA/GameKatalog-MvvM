@@ -1,0 +1,52 @@
+﻿<Window x:Class="GameKatalog_MvvM.Views.SpaceShooterMenuView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GameKatalog_MvvM.Views"
+        mc:Ignorable="d"
+        Title="SpaceShooterMenuView" MinWidth="800" MinHeight="450" WindowStartupLocation="CenterScreen">
+ 
+    <Grid>
+
+        <!-- Hintergrundbild -->
+
+        <Grid.Background>
+
+            <ImageBrush ImageSource="/Assets/Bilder/SpaceShooter/Menü.png"/>
+
+        </Grid.Background>
+
+        <!-- Menü -->
+
+        <StackPanel VerticalAlignment="Top"
+                    HorizontalAlignment="Center"
+                    Margin="0,122,0,0">
+
+            <TextBlock Text="Space Shooter"
+                       FontSize="36"
+                       FontFamily="Comic Sans MS"
+                       Foreground="White"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,20"/>
+
+            <!-- Play Button -->
+
+            <Button Content="Play"
+                    Width="150"
+                    Height="50"
+                    Margin="0,0,0,10"
+                    Click="PlayButton_Click"/>
+
+            <!-- Quit Button -->
+
+            <Button Content="Quit"
+                    Width="150"
+                    Height="50"
+                    Click="QuitButton_Click"/>
+
+        </StackPanel>
+
+    </Grid>
+
+</Window>

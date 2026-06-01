@@ -1,0 +1,116 @@
+﻿<Window x:Class="GameKatalog_MvvM.Views.RPGMenuView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GameKatalog_MvvM.Views"
+        mc:Ignorable="d"
+        Title="RPGMenuView" MinWidth="800" MinHeight="450" WindowStartupLocation="CenterScreen">
+
+
+    <Grid>
+
+        <!-- Hintergrund -->
+
+        <Grid.Background>
+
+            <ImageBrush ImageSource="pack://application:,,,/Assets/Bilder/RPG/RPGmenu.jpg"/>
+        </Grid.Background>
+
+        <!-- Menü -->
+
+        <StackPanel VerticalAlignment="Top"
+                    HorizontalAlignment="Center"
+                    Margin="0,57,0,0">
+
+            <!-- Titel -->
+
+            <TextBlock Text="Faking your RPG"
+                       FontSize="36"
+                       FontFamily="Comic Sans MS"
+                       Foreground="White"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,20"/>
+
+            <!-- Play -->
+
+            <Button Content="Play"
+                    Width="150"
+                    Height="50"
+                    Margin="0,0,0,10"
+                    Click="PlayButton_Click">
+
+                <Button.Style>
+
+                    <Style TargetType="Button">
+
+                        <Setter Property="Template">
+
+                            <Setter.Value>
+
+                                <ControlTemplate TargetType="Button">
+
+                                    <Border Background="#FF007ACC"
+                                            CornerRadius="8"
+                                            Padding="10">
+
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"/>
+
+                                    </Border>
+
+                                </ControlTemplate>
+
+                            </Setter.Value>
+
+                        </Setter>
+
+                    </Style>
+
+                </Button.Style>
+
+            </Button>
+
+            <!-- Quit -->
+
+            <Button Content="Quit"
+                    Width="150"
+                    Height="50"
+                    Click="QuitButton_Click">
+
+                <Button.Style>
+
+                    <Style TargetType="Button">
+
+                        <Setter Property="Template">
+
+                            <Setter.Value>
+
+                                <ControlTemplate TargetType="Button">
+
+                                    <Border Background="#FF007ACC"
+                                            CornerRadius="8"
+                                            Padding="10">
+
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"/>
+
+                                    </Border>
+
+                                </ControlTemplate>
+
+                            </Setter.Value>
+
+                        </Setter>
+
+                    </Style>
+
+                </Button.Style>
+
+            </Button>
+
+        </StackPanel>
+
+    </Grid>
+
+</Window>

@@ -1,0 +1,74 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <RootNamespace>GameKatalog_MvvM</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\Bilder\PacMan\Menu.jpg" />
+    <None Remove="Assets\Bilder\PacMan\orange.jpg" />
+    <None Remove="Assets\Bilder\PacMan\Pac-Man.webp" />
+    <None Remove="Assets\Bilder\PacMan\pacman.jpg" />
+    <None Remove="Assets\Bilder\PacMan\pink.jpg" />
+    <None Remove="Assets\Bilder\PacMan\red.jpg" />
+    <None Remove="Assets\Bilder\RPG\Exit.PNG" />
+    <None Remove="Assets\Bilder\RPG\Heal.PNG" />
+    <None Remove="Assets\Bilder\RPG\Play.PNG" />
+    <None Remove="Assets\Bilder\RPG\RPGmenu.jpg" />
+    <None Remove="Assets\Bilder\RPG\Wand.PNG" />
+    <None Remove="Assets\Bilder\RPG\Ziel.avif" />
+    <None Remove="Assets\Bilder\RPG\Zufall.PNG" />
+    <None Remove="Assets\Bilder\SpaceShooter\Enemy.png" />
+    <None Remove="Assets\Bilder\SpaceShooter\Enemy2.png" />
+    <None Remove="Assets\Bilder\SpaceShooter\Enemy3.png" />
+    <None Remove="Assets\Bilder\SpaceShooter\Enemy4.png" />
+    <None Remove="Assets\Bilder\SpaceShooter\Hintergrund.png" />
+    <None Remove="Assets\Bilder\SpaceShooter\Menü.png" />
+    <None Remove="Assets\Bilder\SpaceShooter\Player.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Assets\Musik\SpaceShooter\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Bilder\PacMan\Menu.jpg" />
+    <Resource Include="Assets\Bilder\PacMan\orange.jpg" />
+    <Resource Include="Assets\Bilder\PacMan\Pac-Man.webp" />
+    <Resource Include="Assets\Bilder\PacMan\pacman.jpg" />
+    <Resource Include="Assets\Bilder\PacMan\pink.jpg" />
+    <Resource Include="Assets\Bilder\PacMan\red.jpg" />
+    <Resource Include="Assets\Bilder\RPG\Exit.png" />
+    <Resource Include="Assets\Bilder\RPG\Heal.png" />
+    <Resource Include="Assets\Bilder\RPG\Play.png" />
+    <Resource Include="Assets\Bilder\RPG\RPGBoss.png" />
+    <Resource Include="Assets\Bilder\RPG\RPGGegner.png" />
+    <Resource Include="Assets\Bilder\RPG\RPGSpieler.png" />
+    <Resource Include="Assets\Bilder\RPG\RPGmenu.jpg" />
+    <Resource Include="Assets\Bilder\RPG\Wand.png" />
+    <Resource Include="Assets\Bilder\RPG\Ziel.avif" />
+    <Resource Include="Assets\Bilder\RPG\Zufall.png" />
+    <Resource Include="Assets\Bilder\SpaceShooter\Enemy.png" />
+    <Resource Include="Assets\Bilder\SpaceShooter\Enemy2.png" />
+    <Resource Include="Assets\Bilder\SpaceShooter\Enemy3.png" />
+    <Resource Include="Assets\Bilder\SpaceShooter\Enemy4.png" />
+    <Resource Include="Assets\Bilder\SpaceShooter\Hintergrund.png" />
+    <Resource Include="Assets\Bilder\SpaceShooter\Menü.png" />
+    <Resource Include="Assets\Bilder\SpaceShooter\Player.png" />
+  </ItemGroup>
+
+</Project>
