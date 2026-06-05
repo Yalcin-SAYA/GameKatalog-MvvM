@@ -43,6 +43,7 @@
 
   <ItemGroup>
     <Folder Include="Assets\Musik\SpaceShooter\" />
+    <Folder Include="NewFolder\" />
   </ItemGroup>
 
   <ItemGroup>
