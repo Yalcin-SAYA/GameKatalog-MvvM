@@ -15,8 +15,17 @@ namespace GameKatalog_MvvM.Data
         protected override void OnConfiguring(
             DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(
-                "Server=(localdb)\\MSSQLLocalDB;Database=GameKatalogDB;Trusted_Connection=True;");
+            string? conn = Environment.GetEnvironmentVariable("GAMEKATALOG_DB");
+
+            if (!string.IsNullOrEmpty(conn))
+            {
+                optionsBuilder.UseSqlServer(conn);
+            }
+            else
+            {
+                optionsBuilder.UseSqlServer(
+                    "Server=(localdb)\\MSSQLLocalDB;Database=GameKatalogDB;Trusted_Connection=True;");
+            }
         }
     }
 }

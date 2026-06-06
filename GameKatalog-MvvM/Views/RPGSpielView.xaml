@@ -18,11 +18,13 @@
 
             <TextBlock x:Name="HpText"
                        Margin="10,5"
-                       FontWeight="Bold"/>
+                       FontWeight="Bold"
+                       Text="{Binding HpText}" />
 
             <TextBlock x:Name="GoldText"
                        Margin="20,5"
-                       FontWeight="Bold"/>
+                       FontWeight="Bold"
+                       Text="{Binding GoldText}" />
 
         </StackPanel>
 

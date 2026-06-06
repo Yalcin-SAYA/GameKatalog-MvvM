@@ -24,8 +24,8 @@
 
         <!-- Score -->
 
-        <Label Name="scoreText"
-               Content="Score: 0"
+         <Label Name="scoreText"
+             Content="{Binding ScoreText}"
                FontSize="18"
                FontWeight="Bold"
                Foreground="White"/>

@@ -11,6 +11,7 @@ using System.Windows.Threading;
 
 using GameKatalog_MvvM.Data;
 using GameKatalog_MvvM.Models;
+using GameKatalog_MvvM.ViewModels;
 
 namespace GameKatalog_MvvM.Views
 {
@@ -43,9 +44,9 @@ namespace GameKatalog_MvvM.Views
 
         int limit = 50;
 
-        int score = 0;
+        private SpaceShooterViewModel _viewModel;
 
-        int damage = 0;
+        // damage is stored in ViewModel now
 
         int enemySpeed = 10;
 
@@ -64,6 +65,9 @@ namespace GameKatalog_MvvM.Views
             _loggedInUsername = username;
 
             _loggedInUserID = userID;
+
+            _viewModel = new SpaceShooterViewModel(_loggedInUsername, _loggedInUserID);
+            this.DataContext = _viewModel;
 
             gameTimer.Interval =
                 TimeSpan.FromMilliseconds(20);
@@ -305,11 +309,8 @@ namespace GameKatalog_MvvM.Views
                     player.Width,
                     player.Height);
 
-            scoreText.Content =
-                "Score: " + score;
-
-            damageText.Content =
-                "Damage: " + damage;
+            // Score and damage text bound to ViewModel
+            damageText.Content = _viewModel.DamageText;
 
             enemyCount--;
 
@@ -418,8 +419,7 @@ namespace GameKatalog_MvvM.Views
                                 itemRemover.Add(x);
 
                                 itemRemover.Add(y);
-
-                                score++;
+                                _viewModel.Score++;
                             }
                         }
                     }
@@ -447,7 +447,7 @@ namespace GameKatalog_MvvM.Views
                     {
                         itemRemover.Add(x);
 
-                        damage += 10;
+                        _viewModel.IncreaseDamage(10);
                     }
 
                     // Spieler getroffen
@@ -456,24 +456,24 @@ namespace GameKatalog_MvvM.Views
                     {
                         itemRemover.Add(x);
 
-                        damage += 5;
+                        _viewModel.IncreaseDamage(5);
                     }
                 }
             }
 
             // Schwierigkeit erhöhen
 
-            if (score > 5)
+            if (_viewModel.Score > 5)
             {
                 limit = 20;
             }
 
-            if (score > 20)
+            if (_viewModel.Score > 20)
             {
                 enemySpeed = 15;
             }
 
-            if (score > 30)
+            if (_viewModel.Score > 30)
             {
                 enemySpeed = 20;
 
@@ -482,11 +482,11 @@ namespace GameKatalog_MvvM.Views
 
             // Game Over
 
-            if (damage >= 100)
+            if (_viewModel.Damage >= 100)
             {
                 gameTimer.Stop();
 
-                SaveScore();
+                _viewModel.SaveScore();
 
                 // Hintergrundmusik stoppen
 
@@ -527,40 +527,13 @@ namespace GameKatalog_MvvM.Views
             itemRemover.Clear();
         }
 
-        // Score speichern
-
-        private void SaveScore()
-        {
-            using (AppDbContext db =
-                new AppDbContext())
-            {
-                Spielstand neuerSpielstand =
-                    new Spielstand
-                    {
-                        Benutzername =
-                            _loggedInUsername,
-
-                        SpielName =
-                            "Space Shooter",
-
-                        Punkte =
-                            score
-                    };
-
-                db.Spielstaende.Add(
-                    neuerSpielstand);
-
-                db.SaveChanges();
-            }
-        }
+            // Score persistence moved to SpaceShooterViewModel
 
         // Spiel zurücksetzen
 
         private void ResetGame()
         {
-            score = 0;
-
-            damage = 0;
+            _viewModel.ResetState();
 
             limit = 50;
 
@@ -597,9 +570,8 @@ namespace GameKatalog_MvvM.Views
 
             Canvas.SetTop(player, 495);
 
-            scoreText.Content = "Score: 0";
-
-            damageText.Content = "Damage: 0";
+            // scoreText and damageText bound to ViewModel
+            damageText.Content = _viewModel.DamageText;
 
             // Musik neu starten
 

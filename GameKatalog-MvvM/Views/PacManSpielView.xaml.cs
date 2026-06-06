@@ -10,37 +10,18 @@ using System.Windows.Threading;
 
 using GameKatalog_MvvM.Data;
 using GameKatalog_MvvM.Models;
+using GameKatalog_MvvM.ViewModels;
 
 namespace GameKatalog_MvvM.Views
 {
     public partial class PacManSpielView : Window
     {
+        private PacManViewModel _viewModel;
         DispatcherTimer gameTimer =
             new DispatcherTimer();
 
-        // Bewegung
-
-        bool goLeft;
-        bool goRight;
-        bool goDown;
-        bool goUp;
-
-        bool noLeft;
-        bool noRight;
-        bool noDown;
-        bool noUp;
-
-        int speed = 8;
-
+        // Score now stored in ViewModel
         Rect pacmanHitBox;
-
-        int ghostSpeed = 10;
-
-        int ghostMoveStep = 160;
-
-        int currentGhostStep;
-
-        int score = 0;
 
         // Login Daten
 
@@ -78,6 +59,9 @@ namespace GameKatalog_MvvM.Views
 
             _loggedInUserID = userID;
 
+            _viewModel = new PacManViewModel(_loggedInUsername, _loggedInUserID);
+            this.DataContext = _viewModel;
+
             GameSetUp();
         }
 
@@ -102,8 +86,7 @@ namespace GameKatalog_MvvM.Views
 
             gameTimer.Start();
 
-            currentGhostStep =
-                ghostMoveStep;
+            // Ghost movement handled in ViewModel
 
             // Bilder laden
 
@@ -142,84 +125,28 @@ namespace GameKatalog_MvvM.Views
             object sender,
             KeyEventArgs e)
         {
-            if (e.Key == Key.Left
-                && !noLeft)
+            if (e.Key == Key.Left && !_viewModel.NoLeft)
             {
-                goLeft = true;
-
-                goRight = false;
-                goUp = false;
-                goDown = false;
-
-                noRight = false;
-                noUp = false;
-                noDown = false;
-
-                pacman.RenderTransform =
-                    new RotateTransform(
-                        -180,
-                        pacman.Width / 2,
-                        pacman.Height / 2);
+                _viewModel.MoveLeft();
+                pacman.RenderTransform = new RotateTransform(-180, pacman.Width / 2, pacman.Height / 2);
             }
 
-            if (e.Key == Key.Right
-                && !noRight)
+            if (e.Key == Key.Right && !_viewModel.NoRight)
             {
-                goRight = true;
-
-                goLeft = false;
-                goUp = false;
-                goDown = false;
-
-                noLeft = false;
-                noUp = false;
-                noDown = false;
-
-                pacman.RenderTransform =
-                    new RotateTransform(
-                        0,
-                        pacman.Width / 2,
-                        pacman.Height / 2);
+                _viewModel.MoveRight();
+                pacman.RenderTransform = new RotateTransform(0, pacman.Width / 2, pacman.Height / 2);
             }
 
-            if (e.Key == Key.Up
-                && !noUp)
+            if (e.Key == Key.Up && !_viewModel.NoUp)
             {
-                goUp = true;
-
-                goLeft = false;
-                goRight = false;
-                goDown = false;
-
-                noLeft = false;
-                noRight = false;
-                noDown = false;
-
-                pacman.RenderTransform =
-                    new RotateTransform(
-                        -90,
-                        pacman.Width / 2,
-                        pacman.Height / 2);
+                _viewModel.MoveUp();
+                pacman.RenderTransform = new RotateTransform(-90, pacman.Width / 2, pacman.Height / 2);
             }
 
-            if (e.Key == Key.Down
-                && !noDown)
+            if (e.Key == Key.Down && !_viewModel.NoDown)
             {
-                goDown = true;
-
-                goLeft = false;
-                goRight = false;
-                goUp = false;
-
-                noLeft = false;
-                noRight = false;
-                noUp = false;
-
-                pacman.RenderTransform =
-                    new RotateTransform(
-                        90,
-                        pacman.Width / 2,
-                        pacman.Height / 2);
+                _viewModel.MoveDown();
+                pacman.RenderTransform = new RotateTransform(90, pacman.Width / 2, pacman.Height / 2);
             }
         }
 
@@ -229,48 +156,23 @@ namespace GameKatalog_MvvM.Views
             object sender,
             EventArgs e)
         {
-            // Score anzeigen
+            // Score anzeigen (bound to ViewModel)
 
-            txtScore.Content =
-                "Score: " + score;
 
-            // Bewegung
+            // Update positions via ViewModel
+            _viewModel.Tick();
 
-            if (goRight)
-            {
-                Canvas.SetLeft(
-                    pacman,
-                    Canvas.GetLeft(pacman)
-                    + speed);
-            }
+            Canvas.SetLeft(pacman, _viewModel.PacmanLeft);
+            Canvas.SetTop(pacman, _viewModel.PacmanTop);
 
-            if (goLeft)
-            {
-                Canvas.SetLeft(
-                    pacman,
-                    Canvas.GetLeft(pacman)
-                    - speed);
-            }
+            Canvas.SetLeft(redGuy, _viewModel.RedGuyLeft);
+            Canvas.SetTop(redGuy, _viewModel.RedGuyTop);
 
-            if (goUp)
-            {
-                Canvas.SetTop(
-                    pacman,
-                    Canvas.GetTop(pacman)
-                    - speed);
-            }
+            Canvas.SetLeft(orangeGuy, _viewModel.OrangeGuyLeft);
+            Canvas.SetTop(orangeGuy, _viewModel.OrangeGuyTop);
 
-            if (goDown)
-            {
-                Canvas.SetTop(
-                    pacman,
-                    Canvas.GetTop(pacman)
-                    + speed);
-            }
-
-            // Grenzen prüfen
-
-            CheckBorders();
+            Canvas.SetLeft(pinkGuy, _viewModel.PinkGuyLeft);
+            Canvas.SetTop(pinkGuy, _viewModel.PinkGuyTop);
 
             // Hitbox
 
@@ -311,10 +213,8 @@ namespace GameKatalog_MvvM.Views
                         && x.Visibility ==
                         Visibility.Visible)
                     {
-                        x.Visibility =
-                            Visibility.Hidden;
-
-                        score++;
+                        x.Visibility = Visibility.Hidden;
+                        _viewModel.Score++;
                     }
                 }
 
@@ -330,22 +230,16 @@ namespace GameKatalog_MvvM.Views
 
             // Gewinn
 
-            if (score == 85)
+            if (_viewModel.Score == 85)
             {
-                SaveScore();
+                _viewModel.SaveScore();
 
                 gameTimer.Stop();
 
-                MessageBox.Show(
-                    "Level 1 geschafft!");
+                MessageBox.Show("Level 1 geschafft!");
 
-                PacManSpielLV2View lv2 =
-                    new PacManSpielLV2View(
-                        _loggedInUsername,
-                        _loggedInUserID);
-
+                PacManSpielLV2View lv2 = new PacManSpielLV2View(_loggedInUsername, _loggedInUserID);
                 lv2.Show();
-
                 this.Close();
             }
         }
@@ -354,42 +248,7 @@ namespace GameKatalog_MvvM.Views
 
         private void CheckBorders()
         {
-            if (goDown
-                && Canvas.GetTop(pacman)
-                + 80 >
-                Application.Current.MainWindow.Height)
-            {
-                noDown = true;
-
-                goDown = false;
-            }
-
-            if (goUp
-                && Canvas.GetTop(pacman) < 1)
-            {
-                noUp = true;
-
-                goUp = false;
-            }
-
-            if (goLeft
-                && Canvas.GetLeft(pacman)
-                - 10 < 1)
-            {
-                noLeft = true;
-
-                goLeft = false;
-            }
-
-            if (goRight
-                && Canvas.GetLeft(pacman)
-                + 70 >
-                Application.Current.MainWindow.Width)
-            {
-                noRight = true;
-
-                goRight = false;
-            }
+            // Borders handled in ViewModel Tick
         }
 
         // Wand Kollision
@@ -398,60 +257,28 @@ namespace GameKatalog_MvvM.Views
             Rectangle wall,
             Rect hitBox)
         {
-            if (goLeft
-                && pacmanHitBox
-                .IntersectsWith(hitBox))
+            if (_viewModel.MovingLeft && pacmanHitBox.IntersectsWith(hitBox))
             {
-                Canvas.SetLeft(
-                    pacman,
-                    Canvas.GetLeft(pacman)
-                    + 10);
-
-                noLeft = true;
-
-                goLeft = false;
+                Canvas.SetLeft(pacman, Canvas.GetLeft(pacman) + 10);
+                _viewModel.BlockLeft();
             }
 
-            if (goRight
-                && pacmanHitBox
-                .IntersectsWith(hitBox))
+            if (_viewModel.MovingRight && pacmanHitBox.IntersectsWith(hitBox))
             {
-                Canvas.SetLeft(
-                    pacman,
-                    Canvas.GetLeft(pacman)
-                    - 10);
-
-                noRight = true;
-
-                goRight = false;
+                Canvas.SetLeft(pacman, Canvas.GetLeft(pacman) - 10);
+                _viewModel.BlockRight();
             }
 
-            if (goDown
-                && pacmanHitBox
-                .IntersectsWith(hitBox))
+            if (_viewModel.MovingDown && pacmanHitBox.IntersectsWith(hitBox))
             {
-                Canvas.SetTop(
-                    pacman,
-                    Canvas.GetTop(pacman)
-                    - 10);
-
-                noDown = true;
-
-                goDown = false;
+                Canvas.SetTop(pacman, Canvas.GetTop(pacman) - 10);
+                _viewModel.BlockDown();
             }
 
-            if (goUp
-                && pacmanHitBox
-                .IntersectsWith(hitBox))
+            if (_viewModel.MovingUp && pacmanHitBox.IntersectsWith(hitBox))
             {
-                Canvas.SetTop(
-                    pacman,
-                    Canvas.GetTop(pacman)
-                    + 10);
-
-                noUp = true;
-
-                goUp = false;
+                Canvas.SetTop(pacman, Canvas.GetTop(pacman) + 10);
+                _viewModel.BlockUp();
             }
         }
 
@@ -466,70 +293,13 @@ namespace GameKatalog_MvvM.Views
             if (pacmanHitBox
                 .IntersectsWith(hitBox))
             {
-                SaveScore();
+                _viewModel.SaveScore();
 
-                GameOver(
-                    "Du wurdest erwischt.");
-            }
-
-            // Bewegung der Geister
-
-            if (ghost.Name ==
-                "orangeGuy")
-            {
-                Canvas.SetLeft(
-                    ghost,
-                    Canvas.GetLeft(ghost)
-                    - ghostSpeed);
-            }
-            else
-            {
-                Canvas.SetLeft(
-                    ghost,
-                    Canvas.GetLeft(ghost)
-                    + ghostSpeed);
-            }
-
-            // Richtungswechsel
-
-            currentGhostStep--;
-
-            if (currentGhostStep < 1)
-            {
-                currentGhostStep =
-                    ghostMoveStep;
-
-                ghostSpeed =
-                    -ghostSpeed;
+                GameOver("Du wurdest erwischt.");
             }
         }
 
-        // Score speichern mit EF
-
-        private void SaveScore()
-        {
-            using (AppDbContext db =
-                new AppDbContext())
-            {
-                Spielstand neuerSpielstand =
-                    new Spielstand
-                    {
-                        Benutzername =
-                            _loggedInUsername,
-
-                        SpielName =
-                            "PacMan",
-
-                        Punkte =
-                            score
-                    };
-
-                db.Spielstaende.Add(
-                    neuerSpielstand);
-
-                db.SaveChanges();
-            }
-        }
+        // SaveScore moved to PacManViewModel
 
         // Game Over
 
@@ -554,82 +324,28 @@ namespace GameKatalog_MvvM.Views
 
         private void ResetGame()
         {
-            // Positionen
+            // Reset model positions and state
+            _viewModel.ResetPositions();
+            _viewModel.Score = 0;
 
-            Canvas.SetLeft(
-                pacman,
-                pacmanStartLeft);
+            Canvas.SetLeft(pacman, _viewModel.PacmanLeft);
+            Canvas.SetTop(pacman, _viewModel.PacmanTop);
 
-            Canvas.SetTop(
-                pacman,
-                pacmanStartTop);
+            Canvas.SetLeft(redGuy, _viewModel.RedGuyLeft);
+            Canvas.SetTop(redGuy, _viewModel.RedGuyTop);
 
-            Canvas.SetLeft(
-                redGuy,
-                redGuyStartLeft);
+            Canvas.SetLeft(orangeGuy, _viewModel.OrangeGuyLeft);
+            Canvas.SetTop(orangeGuy, _viewModel.OrangeGuyTop);
 
-            Canvas.SetTop(
-                redGuy,
-                redGuyStartTop);
+            Canvas.SetLeft(pinkGuy, _viewModel.PinkGuyLeft);
+            Canvas.SetTop(pinkGuy, _viewModel.PinkGuyTop);
 
-            Canvas.SetLeft(
-                orangeGuy,
-                orangeGuyStartLeft);
-
-            Canvas.SetTop(
-                orangeGuy,
-                orangeGuyStartTop);
-
-            Canvas.SetLeft(
-                pinkGuy,
-                pinkGuyStartLeft);
-
-            Canvas.SetTop(
-                pinkGuy,
-                pinkGuyStartTop);
-
-            // Bewegung zurücksetzen
-
-            goLeft = false;
-            goRight = false;
-            goUp = false;
-            goDown = false;
-
-            noLeft = false;
-            noRight = false;
-            noUp = false;
-            noDown = false;
-
-            // Score zurücksetzen
-
-            score = 0;
-
-            txtScore.Content =
-                "Score: 0";
-
-            // Coins wieder sichtbar
-
-            foreach (var x in
-                MyCanvas.Children.OfType<Rectangle>())
+            foreach (var x in MyCanvas.Children.OfType<Rectangle>())
             {
-                if ((string)x.Tag == "coin")
-                {
-                    x.Visibility =
-                        Visibility.Visible;
-                }
+                if ((string)x.Tag == "coin") x.Visibility = Visibility.Visible;
             }
 
-            // Ghostspeed reset
-
-            ghostSpeed = 10;
-
-            ghostMoveStep = 160;
-
-            currentGhostStep =
-                ghostMoveStep;
-
             MyCanvas.Focus();
-
             gameTimer.Start();
         }
     }

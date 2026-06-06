@@ -9,7 +9,7 @@
 
     <ScrollViewer x:Name="gameScrollViewer" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Focusable="False">
         <Canvas Name="MyCanvas" KeyDown="CanvasKeyDown" Focusable="True" Background="Black"  Height="1200" Width="1200">
-            <Label FontSize="20" Name="txtScore" Foreground="White" Content="Score: 0" />
+            <Label FontSize="20" Name="txtScore" Foreground="White" Content="{Binding ScoreText}" />
             <Rectangle Name="pacman" Width="30" Height="30" Fill="Yellow" Canvas.Left="25" Canvas.Top="104" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
             <Rectangle Name="redGuy" Tag="ghost" Width="30" Height="30" Fill="Red" Canvas.Left="173" Canvas.Top="29" />

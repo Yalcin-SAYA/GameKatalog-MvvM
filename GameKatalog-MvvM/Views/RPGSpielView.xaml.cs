@@ -7,6 +7,7 @@ using System.Windows.Media.Imaging;
 
 using GameKatalog_MvvM.Data;
 using GameKatalog_MvvM.Models;
+using GameKatalog_MvvM.ViewModels;
 
 namespace GameKatalog_MvvM.Views
 {
@@ -18,9 +19,7 @@ namespace GameKatalog_MvvM.Views
 
         int playerY = 0;
 
-        int playerHp = 100;
-
-        int playerGold = 0;
+        private RPGViewModel _viewModel;
 
         Random rnd = new Random();
 
@@ -37,14 +36,15 @@ namespace GameKatalog_MvvM.Views
             InitializeComponent();
 
             _loggedInUsername = username;
-
             _loggedInUserID = userID;
 
-            InitializeMap();
+            _viewModel = new RPGViewModel(_loggedInUsername, _loggedInUserID);
+            this.DataContext = _viewModel;
 
+            InitializeMap();
             DrawMap();
 
-            UpdateStatus();
+            // initial binding will show status
         }
 
         // Testmodus
@@ -215,7 +215,7 @@ namespace GameKatalog_MvvM.Views
                         case 1:
 
                             img.Source =
-                                LoadImage("Wand.pngs");
+                                LoadImage("Wand.png");
 
                             btn.Content = img;
 
@@ -384,13 +384,9 @@ namespace GameKatalog_MvvM.Views
 
                 case 4:
 
-                    SaveGold();
+                    _viewModel.SaveGold();
 
-                    MessageBoxResult win =
-                        MessageBox.Show(
-                            $"Du hast gewonnen!\nGold: {playerGold}\nNeustarten?",
-                            "RPG",
-                            MessageBoxButton.YesNo);
+                    MessageBoxResult win = MessageBox.Show($"Du hast gewonnen!\nGold: {_viewModel.PlayerGold}\nNeustarten?", "RPG", MessageBoxButton.YesNo);
 
                     if (win == MessageBoxResult.Yes)
                     {
@@ -422,12 +418,11 @@ namespace GameKatalog_MvvM.Views
 
                     break;
 
-                case 7:
+                    case 7:
 
-                    playerHp += 50;
+                    _viewModel.Heal(50);
 
-                    MessageBox.Show(
-                        "Du bekommst 50 HP.");
+                    MessageBox.Show("Du bekommst 50 HP.");
 
                     map[newY, newX] = 0;
 
@@ -440,15 +435,11 @@ namespace GameKatalog_MvvM.Views
 
             // Tod
 
-            if (playerHp <= 0)
+            if (_viewModel.PlayerHp <= 0)
             {
-                SaveGold();
+                _viewModel.SaveGold();
 
-                MessageBoxResult lose =
-                    MessageBox.Show(
-                        $"Du bist gestorben!\nGold: {playerGold}\nNeustarten?",
-                        "RPG",
-                        MessageBoxButton.YesNo);
+                MessageBoxResult lose = MessageBox.Show($"Du bist gestorben!\nGold: {_viewModel.PlayerGold}\nNeustarten?", "RPG", MessageBoxButton.YesNo);
 
                 if (lose == MessageBoxResult.Yes)
                 {
@@ -487,9 +478,9 @@ namespace GameKatalog_MvvM.Views
                 ? rnd.Next(100, 201)
                 : rnd.Next(10, 51);
 
-            playerHp -= damage;
 
-            playerGold += gold;
+            _viewModel.ApplyDamage(damage);
+            _viewModel.AddGold(gold);
 
             string enemyName =
                 isBoss
@@ -515,22 +506,20 @@ namespace GameKatalog_MvvM.Views
                     int goldFound =
                         rnd.Next(20, 61);
 
-                    playerGold += goldFound;
+                            _viewModel.AddGold(goldFound);
 
-                    MessageBox.Show(
-                        $"Du findest {goldFound} Gold!");
+                            MessageBox.Show($"Du findest {goldFound} Gold!");
 
                     break;
 
-                case 1:
+                    case 1:
 
                     int heal =
                         rnd.Next(10, 31);
 
-                    playerHp += heal;
+                    _viewModel.Heal(heal);
 
-                    MessageBox.Show(
-                        $"Du heilst {heal} HP!");
+                    MessageBox.Show($"Du heilst {heal} HP!");
 
                     break;
 
@@ -539,10 +528,9 @@ namespace GameKatalog_MvvM.Views
                     int damage =
                         rnd.Next(5, 16);
 
-                    playerHp -= damage;
+                    _viewModel.ApplyDamage(damage);
 
-                    MessageBox.Show(
-                        $"Falle! -{damage} HP");
+                    MessageBox.Show($"Falle! -{damage} HP");
 
                     break;
 
@@ -577,38 +565,11 @@ namespace GameKatalog_MvvM.Views
 
         private void UpdateStatus()
         {
-            HpText.Text =
-                $"HP: {playerHp}";
-
-            GoldText.Text =
-                $"Gold: {playerGold}";
+            HpText.Text = _viewModel.HpText;
+            GoldText.Text = _viewModel.GoldText;
         }
 
         // Gold speichern mit EF
-
-        private void SaveGold()
-        {
-            using (AppDbContext db =
-                new AppDbContext())
-            {
-                Spielstand neuerSpielstand =
-                    new Spielstand
-                    {
-                        Benutzername =
-                            _loggedInUsername,
-
-                        SpielName =
-                            "RPG",
-
-                        Punkte =
-                            playerGold
-                    };
-
-                db.Spielstaende.Add(
-                    neuerSpielstand);
-
-                db.SaveChanges();
-            }
-        }
+        // Persistence moved to RPGViewModel.SaveGold()
     }
 }

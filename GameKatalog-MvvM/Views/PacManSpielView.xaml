@@ -7,11 +7,11 @@
         mc:Ignorable="d"
         Title="PacManSpielView" MinWidth="800" MinHeight="450" WindowStartupLocation="CenterScreen">
     <Canvas Name="MyCanvas" KeyDown="CanvasKeyDown" Focusable="True" Background="Black">
-        <Label FontSize="20" Name="txtScore" Foreground="White" Content="Score: 0" />
-        <Rectangle Name="pacman" Width="30" Height="30" Fill="Yellow" Canvas.Left="50" Canvas.Top="104" />
-        <Rectangle Name="redGuy" Tag="ghost" Width="30" Height="30" Fill="Red" Canvas.Left="173" Canvas.Top="29" />
-        <Rectangle Name="orangeGuy" Tag="ghost" Width="30" Height="30" Fill="Orange" Canvas.Left="651" Canvas.Top="104" />
-        <Rectangle Name="pinkGuy" Tag="ghost" Width="30" Height="30" Fill="Pink" Canvas.Left="173" Canvas.Top="404" />
+        <Label FontSize="20" Name="txtScore" Foreground="White" Content="{Binding ScoreText}" />
+        <Rectangle Name="pacman" Width="30" Height="30" Fill="Yellow" Canvas.Left="{Binding PacmanLeft}" Canvas.Top="{Binding PacmanTop}" />
+        <Rectangle Name="redGuy" Tag="ghost" Width="30" Height="30" Fill="Red" Canvas.Left="{Binding RedGuyLeft}" Canvas.Top="{Binding RedGuyTop}" />
+        <Rectangle Name="orangeGuy" Tag="ghost" Width="30" Height="30" Fill="Orange" Canvas.Left="{Binding OrangeGuyLeft}" Canvas.Top="{Binding OrangeGuyTop}" />
+        <Rectangle Name="pinkGuy" Tag="ghost" Width="30" Height="30" Fill="Pink" Canvas.Left="{Binding PinkGuyLeft}" Canvas.Top="{Binding PinkGuyTop}" />
         <Rectangle Tag="wall" Stroke="Aqua" StrokeThickness="3" Height="20" Width="578" Canvas.Left="144" Canvas.Top="79" HorizontalAlignment="Left" VerticalAlignment="Center" />
         <Rectangle Tag="wall" Stroke="Aqua" StrokeThickness="3" Height="20" Width="402" Canvas.Left="231" Canvas.Top="159" />
         <Rectangle Tag="wall" Stroke="Aqua" StrokeThickness="3" Height="20" Width="124" Canvas.Left="142" Canvas.Top="339" />
