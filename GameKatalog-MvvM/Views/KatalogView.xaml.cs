@@ -22,33 +22,23 @@ namespace GameKatalog_MvvM.Views
         }
 
         // Gesamtpunkte laden
+        //LINQ-Filtert nach dem Benutzernamen + summe der Punkte (aller Spiele)
 
         private void LoadGesamtpunkte()
         {
-            using (AppDbContext db =
-                new AppDbContext())
+            using (AppDbContext db = new AppDbContext())
             {
-                int gesamtpunkte =
-                    db.Spielstaende
-                    .Where(x =>
-                        x.Benutzername ==
-                        _loggedInUsername)
-                    .Sum(x => x.Punkte);
+                int gesamtpunkte = db.Spielstaende.Where(x => x.Benutzername == _loggedInUsername).Sum(x => x.Punkte);
 
-                GesamtpunkteLabel.Content =
-                    "Gesamtpunkte: "
-                    + gesamtpunkte;
+                GesamtpunkteLabel.Content = "Gesamtpunkte: " + gesamtpunkte;
             }
         }
 
         // Logout
 
-        private void LogoutButton_Click(
-            object sender,
-            RoutedEventArgs e)
+        private void LogoutButton_Click( object sender,RoutedEventArgs e)
         {
-            MainWindow mainWindow =
-                new MainWindow();
+            MainWindow mainWindow = new MainWindow();
 
             mainWindow.Show();
 
@@ -57,14 +47,9 @@ namespace GameKatalog_MvvM.Views
 
         // Space Shooter öffnen
 
-        private void SpaceShooterButton_Click(
-            object sender,
-            RoutedEventArgs e)
+        private void SpaceShooterButton_Click(object sender, RoutedEventArgs e)
         {
-            SpaceShooterMenuView menu =
-                new SpaceShooterMenuView(
-                    _loggedInUsername,
-                    "1");
+            SpaceShooterMenuView menu = new SpaceShooterMenuView(_loggedInUsername,"1");
 
             menu.Show();
 
@@ -73,10 +58,7 @@ namespace GameKatalog_MvvM.Views
 
         private void PacManButton_Click(object sender, RoutedEventArgs e)
         {
-            PacManMenu menu =
-                new PacManMenu(
-                    _loggedInUsername,
-                    "1");
+            PacManMenu menu = new PacManMenu(_loggedInUsername,"1");
 
             menu.Show();
 
@@ -85,10 +67,7 @@ namespace GameKatalog_MvvM.Views
 
         private void RPGButton_Click(object sender, RoutedEventArgs e)
         {
-            RPGMenuView menu =
-                new RPGMenuView(
-                    _loggedInUsername,
-                    "1");
+            RPGMenuView menu = new RPGMenuView( _loggedInUsername,"1");
 
             menu.Show();
 

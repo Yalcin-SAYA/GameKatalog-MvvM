@@ -12,6 +12,7 @@ namespace GameKatalog_MvvM.ViewModels
             get => _score;
             set
             {
+                // SetProperty ändert den Wert und meldet es automatisch der UI
                 if (SetProperty(ref _score, value))
                 {
                     OnPropertyChanged(nameof(ScoreText));
@@ -20,7 +21,7 @@ namespace GameKatalog_MvvM.ViewModels
         }
 
         public string ScoreText => "Score: " + Score;
-
+        //Spieler Daten nach erstellung Fix
         public string Username { get; }
 
         public string? UserId { get; }
@@ -32,32 +33,31 @@ namespace GameKatalog_MvvM.ViewModels
             Score = 0;
         }
 
-        // Positions & movement
+        // Position und Bewegung von Spieler udn Gegner
         private double _pacmanLeft = 50;
         public double PacmanLeft { get => _pacmanLeft; set => SetProperty(ref _pacmanLeft, value); }
 
         private double _pacmanTop = 104;
         public double PacmanTop { get => _pacmanTop; set => SetProperty(ref _pacmanTop, value); }
-
+        //Geit ROT
         private double _redGuyLeft = 173;
         public double RedGuyLeft { get => _redGuyLeft; set => SetProperty(ref _redGuyLeft, value); }
-
         private double _redGuyTop = 29;
         public double RedGuyTop { get => _redGuyTop; set => SetProperty(ref _redGuyTop, value); }
-
+        //Geist ORANGE
         private double _orangeGuyLeft = 651;
         public double OrangeGuyLeft { get => _orangeGuyLeft; set => SetProperty(ref _orangeGuyLeft, value); }
 
         private double _orangeGuyTop = 104;
         public double OrangeGuyTop { get => _orangeGuyTop; set => SetProperty(ref _orangeGuyTop, value); }
-
+        //Geist PINK
         private double _pinkGuyLeft = 173;
         public double PinkGuyLeft { get => _pinkGuyLeft; set => SetProperty(ref _pinkGuyLeft, value); }
 
         private double _pinkGuyTop = 404;
         public double PinkGuyTop { get => _pinkGuyTop; set => SetProperty(ref _pinkGuyTop, value); }
 
-        // Additional ghost positions used by LV2
+        // zusätzlciehe gegner LV2
         private double _violetGuyLeft;
         public double VioletGuyLeft { get => _violetGuyLeft; set => SetProperty(ref _violetGuyLeft, value); }
         private double _violetGuyTop;
@@ -93,7 +93,6 @@ namespace GameKatalog_MvvM.ViewModels
         private double _blueGuyTop;
         public double BlueGuyTop { get => _blueGuyTop; set => SetProperty(ref _blueGuyTop, value); }
 
-        // Movement state
         private bool _movingLeft;
         public bool MovingLeft { get => _movingLeft; private set => SetProperty(ref _movingLeft, value); }
         private bool _movingRight;
@@ -103,7 +102,6 @@ namespace GameKatalog_MvvM.ViewModels
         private bool _movingDown;
         public bool MovingDown { get => _movingDown; private set => SetProperty(ref _movingDown, value); }
 
-        // Blocked directions
         private bool _noLeft;
         public bool NoLeft { get => _noLeft; private set => SetProperty(ref _noLeft, value); }
         private bool _noRight;
@@ -121,7 +119,7 @@ namespace GameKatalog_MvvM.ViewModels
         private int currentGhostStep = 160;
         public bool UseViewModelGhostMovement { get; set; } = true;
 
-        // Waypoints for fixed-position patrols
+        // Bewegungen der Gegner von Position A->B/B->A
         private (double Left, double Top)[] orangeWaypoints = new[] { (651.0, 104.0), (173.0, 104.0) };
         private int orangeTargetIndex = 1;
 
@@ -172,7 +170,7 @@ namespace GameKatalog_MvvM.ViewModels
             if (MovingDown) PacmanTop += speed;
             if (UseViewModelGhostMovement)
             {
-                // Ghost movement (patrol between fixed waypoints)
+                // geister bewegungen 
                 // Orange
                 {
                     var target = orangeWaypoints[orangeTargetIndex];
@@ -192,7 +190,7 @@ namespace GameKatalog_MvvM.ViewModels
                     }
                 }
 
-                // Red
+                // Rot
                 {
                     var target = redWaypoints[redTargetIndex];
                     double dx = target.Left - RedGuyLeft;
@@ -231,7 +229,7 @@ namespace GameKatalog_MvvM.ViewModels
                 }
             }
         }
-
+        //Bei Game over oder neustart Positionen reset
         public void ResetPositions()
         {
             PacmanLeft = 50; PacmanTop = 104;
@@ -245,13 +243,11 @@ namespace GameKatalog_MvvM.ViewModels
             ghostSpeed = 10;
             ghostMoveStep = 160;
             currentGhostStep = ghostMoveStep;
-
-            // reset target indices to point to the other waypoint so they start moving
+            //geister positionen und Bewegungen zurück setzetn 
             orangeTargetIndex = 1;
             redTargetIndex = 1;
             pinkTargetIndex = 1;
-
-            // reset additional ghosts to reasonable defaults
+            // zusätzliche gegner zurücksetzen(lv2)
             VioletGuyLeft = 0; VioletGuyTop = 0;
             GreyGuyLeft = 0; GreyGuyTop = 0;
             HotpinkGuyLeft = 0; HotpinkGuyTop = 0;

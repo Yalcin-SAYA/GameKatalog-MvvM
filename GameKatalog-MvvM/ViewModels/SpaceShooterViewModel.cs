@@ -12,13 +12,14 @@ namespace GameKatalog_MvvM.ViewModels
         public string ScoreText => "Score: " + Score;
 
         private int _damage;
+        //nur ViewModel darf schaden ändern deswgen privat
         public int Damage { get => _damage; private set { if (SetProperty(ref _damage, value)) OnPropertyChanged(nameof(DamageText)); } }
 
         public string DamageText => "Damage: " + Damage;
 
         public string Username { get; }
         public string? UserId { get; }
-
+        //start werte
         public SpaceShooterViewModel(string username, string? userId)
         {
             Username = username;
@@ -36,13 +37,13 @@ namespace GameKatalog_MvvM.ViewModels
         {
             Damage += amount;
         }
-
+        //start werte zurücksetzen bei neustart 
         public void ResetState()
         {
             Score = 0;
             Damage = 0;
         }
-
+        //speichern des scores 
         public void SaveScore()
         {
             using (AppDbContext db = new AppDbContext())

@@ -10,8 +10,7 @@ namespace GameKatalog_MvvM.Views
 
         // Testmodus
 
-        public PacManMenu()
-            : this("Gast", null)
+        public PacManMenu(): this("Gast", null)
         {
 
         }
@@ -31,14 +30,9 @@ namespace GameKatalog_MvvM.Views
 
         // Spiel starten
 
-        private void PlayButton_Click(
-            object sender,
-            RoutedEventArgs e)
+        private void PlayButton_Click( object sender,RoutedEventArgs e)
         {
-            PacManSpielView game =
-                new PacManSpielView(
-                    _loggedInUsername,
-                    _loggedInUserID);
+            PacManSpielView game = new PacManSpielView(_loggedInUsername,_loggedInUserID);
 
             game.Show();
 
@@ -47,13 +41,9 @@ namespace GameKatalog_MvvM.Views
 
         // Zurück zum Katalog
 
-        private void QuitButton_Click(
-            object sender,
-            RoutedEventArgs e)
+        private void QuitButton_Click( object sender, RoutedEventArgs e)
         {
-            KatalogView katalog =
-                new KatalogView(
-                    _loggedInUsername);
+            KatalogView katalog = new KatalogView( _loggedInUsername);
 
             katalog.Show();
 
