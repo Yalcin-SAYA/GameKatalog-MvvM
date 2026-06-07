@@ -298,37 +298,23 @@ namespace GameKatalog_MvvM.Views
 
             // Bewegung links
 
-            if (moveLeft &&
-                Canvas.GetLeft(player) > 0)
+            if (moveLeft && Canvas.GetLeft(player) > 0)
             {
-                Canvas.SetLeft(
-                    player,
-                    Canvas.GetLeft(player)
-                    - playerSpeed);
+                Canvas.SetLeft( player, Canvas.GetLeft(player)- playerSpeed);
             }
 
             // Bewegung rechts
 
-            if (moveRight &&
-                Canvas.GetLeft(player)
-                + player.Width
-                < MyCanvas.ActualWidth)
+            if (moveRight && Canvas.GetLeft(player) + player.Width < MyCanvas.ActualWidth)
             {
-                Canvas.SetLeft(
-                    player,
-                    Canvas.GetLeft(player)
-                    + playerSpeed);
+                Canvas.SetLeft(player,Canvas.GetLeft(player) + playerSpeed);
             }
 
             // Bewegung oben
 
-            if (moveUp &&
-                Canvas.GetTop(player) > 0)
+            if (moveUp && Canvas.GetTop(player) > 0)
             {
-                Canvas.SetTop(
-                    player,
-                    Canvas.GetTop(player)
-                    - playerSpeed);
+                Canvas.SetTop(player,Canvas.GetTop(player)- playerSpeed);
             }
 
             // Bewegung unten
@@ -491,8 +477,7 @@ namespace GameKatalog_MvvM.Views
 
             playerSpeed = 10;
 
-            List<UIElement> removeItems =
-                new List<UIElement>();
+            List<UIElement> removeItems = new List<UIElement>();
 
             // Gegner und Bullets entfernen
 
@@ -501,8 +486,7 @@ namespace GameKatalog_MvvM.Views
                 if (item is Rectangle rect
                     && rect.Tag != null)
                 {
-                    if ((string)rect.Tag == "enemy"
-                        || (string)rect.Tag == "bullet")
+                    if ((string)rect.Tag == "enemy" || (string)rect.Tag == "bullet")
                     {
                         removeItems.Add(rect);
                     }
