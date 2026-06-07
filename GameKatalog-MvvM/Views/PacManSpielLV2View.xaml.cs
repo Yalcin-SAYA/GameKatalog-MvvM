@@ -80,13 +80,12 @@ namespace GameKatalog_MvvM.Views
 
         // Testmodus
 
-        public PacManSpielLV2View()
-            : this("Gast", null)
+        public PacManSpielLV2View() : this("Gast", null)
         {
 
         }
 
-        // Tastatur
+        //Bewegung mit WASD
 
         private void CanvasKeyDown(object sender, KeyEventArgs e)
         {
@@ -178,29 +177,21 @@ namespace GameKatalog_MvvM.Views
 
         // Bilder laden
 
-        private ImageBrush LoadImage(
-            string fileName)
+        private ImageBrush LoadImage(string fileName)
         {
-            ImageBrush imageBrush =
-                new ImageBrush();
+            ImageBrush imageBrush = new ImageBrush();
 
-            imageBrush.ImageSource =
-                new BitmapImage(
-                    new Uri(
-                        $"pack://application:,,,/Assets/Bilder/PacMan/{fileName}"));
+            imageBrush.ImageSource = new BitmapImage( new Uri($"pack://application:,,,/Assets/Bilder/PacMan/{fileName}"));
 
             return imageBrush;
         }
 
         // Haupt Spiel Loop
 
-        private void GameLoop(
-            object sender,
-            EventArgs e)
+        private void GameLoop(object sender,EventArgs e)
         {
-            // txtScore is bound to ViewModel.ScoreText
 
-            // Update positions via ViewModel
+            // Update position mit ViewModel
             _viewModel.Tick();
 
             Canvas.SetLeft(pacman, _viewModel.PacmanLeft);
@@ -215,7 +206,7 @@ namespace GameKatalog_MvvM.Views
             Canvas.SetLeft(pinkGuy, _viewModel.PinkGuyLeft);
             Canvas.SetTop(pinkGuy, _viewModel.PinkGuyTop);
 
-            // Ensure ghosts move every frame (independent of collision checks)
+            //Bewegung der geister
             MoveHorizontalGhost(redGuy, ref redGuySpeed, 140, 697);
             MoveHorizontalGhost(orangeGuy, ref orangeGuySpeed, 100, 770);
             MoveHorizontalGhost(pinkGuy, ref pinkGuySpeed, 140, 690);
@@ -229,78 +220,40 @@ namespace GameKatalog_MvvM.Views
 
             // Hitbox
 
-            pacmanHitBox =
-                new Rect(
-                    Canvas.GetLeft(pacman),
-                    Canvas.GetTop(pacman),
-                    pacman.Width,
-                    pacman.Height);
+            pacmanHitBox = new Rect(Canvas.GetLeft(pacman), Canvas.GetTop(pacman), pacman.Width, pacman.Height);
 
             // Kamera auf Pacman
 
-            double desiredScrollX =
-                Canvas.GetLeft(pacman)
-                + (pacman.Width / 2)
-                - (gameScrollViewer.ActualWidth / 2);
+            double desiredScrollX = Canvas.GetLeft(pacman) + (pacman.Width / 2) - (gameScrollViewer.ActualWidth / 2);
 
-            double desiredScrollY =
-                Canvas.GetTop(pacman)
-                + (pacman.Height / 2)
-                - (gameScrollViewer.ActualHeight / 2);
+            double desiredScrollY = Canvas.GetTop(pacman)  + (pacman.Height / 2) - (gameScrollViewer.ActualHeight / 2);
 
-            desiredScrollX =
-                Math.Max(
-                    0,
-                    Math.Min(
-                        desiredScrollX,
-                        MyCanvas.Width
-                        - gameScrollViewer.ActualWidth));
+            desiredScrollX = Math.Max(0,Math.Min( desiredScrollX, MyCanvas.Width - gameScrollViewer.ActualWidth));
 
-            desiredScrollY =
-                Math.Max(
-                    0,
-                    Math.Min(
-                        desiredScrollY,
-                        MyCanvas.Height
-                        - gameScrollViewer.ActualHeight));
+            desiredScrollY = Math.Max(0,Math.Min(desiredScrollY,MyCanvas.Height - gameScrollViewer.ActualHeight));
 
-            gameScrollViewer
-                .ScrollToHorizontalOffset(
-                    desiredScrollX);
+            gameScrollViewer.ScrollToHorizontalOffset(desiredScrollX);
 
-            gameScrollViewer
-                .ScrollToVerticalOffset(
-                    desiredScrollY);
+            gameScrollViewer.ScrollToVerticalOffset(desiredScrollY);
 
             // Kollisionen
 
-            foreach (var x in
-                MyCanvas.Children.OfType<Rectangle>())
+            foreach (var x in MyCanvas.Children.OfType<Rectangle>())
             {
-                Rect hitBox =
-                    new Rect(
-                        Canvas.GetLeft(x),
-                        Canvas.GetTop(x),
-                        x.Width,
-                        x.Height);
+                Rect hitBox = new Rect(Canvas.GetLeft(x), Canvas.GetTop(x), x.Width, x.Height);
 
                 // Wände
 
                 if ((string)x.Tag == "wall")
                 {
-                    CheckWallCollision(
-                        x,
-                        hitBox);
+                    CheckWallCollision(x, hitBox);
                 }
 
                 // Coins
 
                 if ((string)x.Tag == "coin")
                 {
-                    if (pacmanHitBox
-                        .IntersectsWith(hitBox)
-                        && x.Visibility ==
-                        Visibility.Visible)
+                    if (pacmanHitBox.IntersectsWith(hitBox) && x.Visibility == Visibility.Visible)
                     {
                         x.Visibility = Visibility.Hidden;
                         _viewModel.Score++;
@@ -311,9 +264,7 @@ namespace GameKatalog_MvvM.Views
 
                 if ((string)x.Tag == "ghost")
                 {
-                    CheckGhostCollision(
-                        x,
-                        hitBox);
+                    CheckGhostCollision(x, hitBox);
                 }
             }
 
@@ -366,9 +317,7 @@ namespace GameKatalog_MvvM.Views
 
         // Wand Kollision
 
-        private void CheckWallCollision(
-            Rectangle wall,
-            Rect hitBox)
+        private void CheckWallCollision(Rectangle wall,Rect hitBox)
         {
                 if (pacmanHitBox.IntersectsWith(hitBox))
                 {
@@ -418,44 +367,28 @@ namespace GameKatalog_MvvM.Views
             {
                 _viewModel.SaveScore();
 
-                GameOver(
-                    "Du wurdest erwischt.",
-                    false);
+                GameOver("Du wurdest erwischt.",false);
             }
 
-            double left =
-                Canvas.GetLeft(ghost);
+            double left = Canvas.GetLeft(ghost);
 
-            double top =
-                Canvas.GetTop(ghost);
+            double top = Canvas.GetTop(ghost);
 
             // Ghost Bewegungen
 
             if (ghost.Name == "redGuy")
             {
-                MoveHorizontalGhost(
-                    ghost,
-                    ref redGuySpeed,
-                    140,
-                    697);
+                MoveHorizontalGhost(ghost, ref redGuySpeed, 140, 697);
             }
 
             else if (ghost.Name == "orangeGuy")
             {
-                MoveHorizontalGhost(
-                    ghost,
-                    ref orangeGuySpeed,
-                    100,
-                    770);
+                MoveHorizontalGhost( ghost,ref orangeGuySpeed, 100, 770);
             }
 
             else if (ghost.Name == "pinkGuy")
             {
-                MoveHorizontalGhost(
-                    ghost,
-                    ref pinkGuySpeed,
-                    140,
-                    690);
+                MoveHorizontalGhost(ghost, ref pinkGuySpeed,140, 690);
             }
 
             else if (ghost.Name == "tanGuy")
@@ -545,7 +478,7 @@ namespace GameKatalog_MvvM.Views
 
             Console.WriteLine($"MoveHorizontalGhost: {ghost.Name} -> {newLeft}");
 
-            // update viewmodel positions so they're authoritative
+            //Viwmodel updaten für bewegung von geister 
             if (ghost.Name == "redGuy") _viewModel.RedGuyLeft = newLeft;
             else if (ghost.Name == "orangeGuy") _viewModel.OrangeGuyLeft = newLeft;
             else if (ghost.Name == "pinkGuy") _viewModel.PinkGuyLeft = newLeft;

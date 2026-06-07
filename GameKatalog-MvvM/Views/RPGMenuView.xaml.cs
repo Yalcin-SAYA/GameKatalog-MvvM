@@ -20,8 +20,7 @@ namespace GameKatalog_MvvM.Views
 
         // Testmodus
 
-        public RPGMenuView()
-            : this("Gast", null)
+        public RPGMenuView(): this("Gast", null)
         {
 
         }

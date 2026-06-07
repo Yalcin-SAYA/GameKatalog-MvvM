@@ -67,8 +67,7 @@ namespace GameKatalog_MvvM.Views
 
         // Testmodus
 
-        public PacManSpielView()
-            : this("Gast", null)
+        public PacManSpielView() : this("Gast", null)
         {
 
         }
@@ -81,49 +80,35 @@ namespace GameKatalog_MvvM.Views
 
             gameTimer.Tick += GameLoop;
 
-            gameTimer.Interval =
-                TimeSpan.FromMilliseconds(20);
+            gameTimer.Interval = TimeSpan.FromMilliseconds(20);
 
             gameTimer.Start();
 
-            // Ghost movement handled in ViewModel
-
             // Bilder laden
 
-            pacman.Fill =
-                LoadImage("pacman.jpg");
+            pacman.Fill = LoadImage("pacman.jpg");
 
-            redGuy.Fill =
-                LoadImage("red.jpg");
+            redGuy.Fill = LoadImage("red.jpg");
 
-            orangeGuy.Fill =
-                LoadImage("orange.jpg");
+            orangeGuy.Fill = LoadImage("orange.jpg");
 
-            pinkGuy.Fill =
-                LoadImage("pink.jpg");
+            pinkGuy.Fill = LoadImage("pink.jpg");
         }
 
         // Bilder laden
 
-        private ImageBrush LoadImage(
-            string fileName)
+        private ImageBrush LoadImage( string fileName)
         {
-            ImageBrush imageBrush =
-                new ImageBrush();
+            ImageBrush imageBrush = new ImageBrush();
 
-            imageBrush.ImageSource =
-                new BitmapImage(
-                    new Uri(
-                        $"pack://application:,,,/Assets/Bilder/PacMan/{fileName}"));
+            imageBrush.ImageSource = new BitmapImage(new Uri($"pack://application:,,,/Assets/Bilder/PacMan/{fileName}"));
 
             return imageBrush;
         }
 
-        // Tastatur
+        // Bewegung Pfeiltasten 
 
-        private void CanvasKeyDown(
-            object sender,
-            KeyEventArgs e)
+        private void CanvasKeyDown(object sender,KeyEventArgs e)
         {
             if (e.Key == Key.Left && !_viewModel.NoLeft)
             {
@@ -152,14 +137,10 @@ namespace GameKatalog_MvvM.Views
 
         // Haupt Spiel Loop
 
-        private void GameLoop(
-            object sender,
-            EventArgs e)
+        private void GameLoop(object sender,EventArgs e)
         {
-            // Score anzeigen (bound to ViewModel)
 
-
-            // Update positions via ViewModel
+            // Positionen aktulasieren mit ViewModel Tick
             _viewModel.Tick();
 
             Canvas.SetLeft(pacman, _viewModel.PacmanLeft);
@@ -176,42 +157,26 @@ namespace GameKatalog_MvvM.Views
 
             // Hitbox
 
-            pacmanHitBox =
-                new Rect(
-                    Canvas.GetLeft(pacman),
-                    Canvas.GetTop(pacman),
-                    pacman.Width,
-                    pacman.Height);
+            pacmanHitBox = new Rect( Canvas.GetLeft(pacman), Canvas.GetTop(pacman), pacman.Width, pacman.Height);
 
             // Alle Elemente prüfen
 
-            foreach (var x in
-                MyCanvas.Children.OfType<Rectangle>())
+            foreach (var x in MyCanvas.Children.OfType<Rectangle>())
             {
-                Rect hitBox =
-                    new Rect(
-                        Canvas.GetLeft(x),
-                        Canvas.GetTop(x),
-                        x.Width,
-                        x.Height);
+                Rect hitBox = new Rect(Canvas.GetLeft(x), Canvas.GetTop(x),x.Width, x.Height);
 
                 // Wände
 
                 if ((string)x.Tag == "wall")
                 {
-                    CheckWallCollision(
-                        x,
-                        hitBox);
+                    CheckWallCollision( x, hitBox);
                 }
 
                 // Coins
 
                 if ((string)x.Tag == "coin")
                 {
-                    if (pacmanHitBox
-                        .IntersectsWith(hitBox)
-                        && x.Visibility ==
-                        Visibility.Visible)
+                    if (pacmanHitBox.IntersectsWith(hitBox) && x.Visibility == Visibility.Visible)
                     {
                         x.Visibility = Visibility.Hidden;
                         _viewModel.Score++;
@@ -248,7 +213,7 @@ namespace GameKatalog_MvvM.Views
 
         private void CheckBorders()
         {
-            // Borders handled in ViewModel Tick
+            // Border in Model prüfen
         }
 
         // Wand Kollision
@@ -299,7 +264,7 @@ namespace GameKatalog_MvvM.Views
             }
         }
 
-        // SaveScore moved to PacManViewModel
+        // SaveScore wird aufgerufen 
 
         // Game Over
 
