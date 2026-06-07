@@ -353,16 +353,9 @@ namespace GameKatalog_MvvM.Views
                 if (x is Rectangle &&
                     (string)x.Tag == "bullet")
                 {
-                    Canvas.SetTop(
-                        x,
-                        Canvas.GetTop(x) - 20);
+                    Canvas.SetTop( x,Canvas.GetTop(x) - 20);
 
-                    Rect bulletHitBox =
-                        new Rect(
-                            Canvas.GetLeft(x),
-                            Canvas.GetTop(x),
-                            x.Width,
-                            x.Height);
+                    Rect bulletHitBox = new Rect(Canvas.GetLeft(x), Canvas.GetTop(x), x.Width, x.Height);
 
                     // Bullet außerhalb
 
@@ -378,12 +371,7 @@ namespace GameKatalog_MvvM.Views
                         if (y is Rectangle &&
                             (string)y.Tag == "enemy")
                         {
-                            Rect enemyHitBox =
-                                new Rect(
-                                    Canvas.GetLeft(y),
-                                    Canvas.GetTop(y),
-                                    y.Width,
-                                    y.Height);
+                            Rect enemyHitBox = new Rect(Canvas.GetLeft(y),Canvas.GetTop(y), y.Width, y.Height);
 
                             // Treffer
 
@@ -407,12 +395,7 @@ namespace GameKatalog_MvvM.Views
                         x,
                         Canvas.GetTop(x) + enemySpeed);
 
-                    Rect enemyHitBox =
-                        new Rect(
-                            Canvas.GetLeft(x),
-                            Canvas.GetTop(x),
-                            x.Width,
-                            x.Height);
+                    Rect enemyHitBox = new Rect(Canvas.GetLeft(x),Canvas.GetTop(x), x.Width,x.Height);
 
                     // Gegner unten angekommen
 
@@ -468,10 +451,7 @@ namespace GameKatalog_MvvM.Views
                 */
 
                 MessageBoxResult result =
-                    MessageBox.Show(
-                        "Game Over!\n\nNeu starten?",
-                        "Verloren",
-                        MessageBoxButton.YesNo);
+                    MessageBox.Show("Game Over!\n\nNeu starten?","Verloren",MessageBoxButton.YesNo);
 
                 if (result == MessageBoxResult.Yes)
                 {
@@ -479,10 +459,7 @@ namespace GameKatalog_MvvM.Views
                 }
                 else
                 {
-                    SpaceShooterMenuView menu =
-                        new SpaceShooterMenuView(
-                            _loggedInUsername,
-                            _loggedInUserID);
+                    SpaceShooterMenuView menu = new SpaceShooterMenuView( _loggedInUsername,_loggedInUserID);
 
                     menu.Show();
 
