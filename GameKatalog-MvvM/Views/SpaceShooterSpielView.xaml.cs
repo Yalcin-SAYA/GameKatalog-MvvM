@@ -17,24 +17,20 @@ namespace GameKatalog_MvvM.Views
 {
     public partial class SpaceShooterSpielView : Window
     {
-        DispatcherTimer gameTimer =
-            new DispatcherTimer();
+        DispatcherTimer gameTimer =new DispatcherTimer();
 
-        // Sounds
+        // Sounds -- musik und sound datei koruppted und entfernt 
 
-        MediaPlayer shootSound =
-            new MediaPlayer();
+        MediaPlayer shootSound = new MediaPlayer();
 
-        MediaPlayer hintergrundMusik =
-            new MediaPlayer();
+        MediaPlayer hintergrundMusik = new MediaPlayer();
 
         bool moveLeft;
         bool moveRight;
         bool moveUp;
         bool moveDown;
 
-        List<Rectangle> itemRemover =
-            new List<Rectangle>();
+        List<Rectangle> itemRemover = new List<Rectangle>();
 
         Random random = new Random();
 
@@ -69,8 +65,7 @@ namespace GameKatalog_MvvM.Views
             _viewModel = new SpaceShooterViewModel(_loggedInUsername, _loggedInUserID);
             this.DataContext = _viewModel;
 
-            gameTimer.Interval =
-                TimeSpan.FromMilliseconds(20);
+            gameTimer.Interval = TimeSpan.FromMilliseconds(20);
 
             gameTimer.Tick += GameLoop;
 
@@ -80,25 +75,16 @@ namespace GameKatalog_MvvM.Views
 
             // Hintergrundbild
 
-            ImageBrush bg =
-                new ImageBrush();
+            ImageBrush bg = new ImageBrush();
 
-            bg.ImageSource =
-                new BitmapImage(
-                    new Uri(
-                        "pack://application:,,,/Assets/Bilder/SpaceShooter/Hintergrund.png"));
+            bg.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Assets/Bilder/SpaceShooter/Hintergrund.png"));
 
             MyCanvas.Background = bg;
 
             // Player Bild
 
-            ImageBrush playerImage =
-                new ImageBrush();
-
-            playerImage.ImageSource =
-                new BitmapImage(
-                    new Uri(
-                        "pack://application:,,,/Assets/Bilder/SpaceShooter/Player.png"));
+            ImageBrush playerImage = new ImageBrush();
+            playerImage.ImageSource = new BitmapImage( new Uri("pack://application:,,,/Assets/Bilder/SpaceShooter/Player.png"));
 
             player.Fill = playerImage;
 
@@ -133,17 +119,14 @@ namespace GameKatalog_MvvM.Views
 
         // Testmodus ohne Login
 
-        public SpaceShooterSpielView()
-            : this("Gast", null)
+        public SpaceShooterSpielView(): this("Gast", null)
         {
 
         }
 
         // Taste gedrückt
 
-        private void onKeyDown(
-            object sender,
-            KeyEventArgs e)
+        private void onKeyDown(object sender,KeyEventArgs e)
         {
             if (e.Key == Key.Left)
             {
@@ -168,9 +151,7 @@ namespace GameKatalog_MvvM.Views
 
         // Taste losgelassen
 
-        private void onKeyUp(
-            object sender,
-            KeyEventArgs e)
+        private void onKeyUp(object sender,KeyEventArgs e)
         {
             if (e.Key == Key.Left)
             {
@@ -196,8 +177,7 @@ namespace GameKatalog_MvvM.Views
 
             if (e.Key == Key.Space)
             {
-                Rectangle newBullet =
-                    new Rectangle
+                Rectangle newBullet = new Rectangle
                     {
                         Tag = "bullet",
                         Height = 20,
@@ -298,16 +278,9 @@ namespace GameKatalog_MvvM.Views
 
         // Haupt GameLoop
 
-        private void GameLoop(
-            object sender,
-            EventArgs e)
+        private void GameLoop(object sender,EventArgs e)
         {
-            playerHitBox =
-                new Rect(
-                    Canvas.GetLeft(player),
-                    Canvas.GetTop(player),
-                    player.Width,
-                    player.Height);
+            playerHitBox =new Rect(Canvas.GetLeft(player),Canvas.GetTop(player),player.Width, player.Height);
 
             // Score and damage text bound to ViewModel
             damageText.Content = _viewModel.DamageText;

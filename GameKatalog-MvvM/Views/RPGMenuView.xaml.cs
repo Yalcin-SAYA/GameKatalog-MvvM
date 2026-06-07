@@ -27,9 +27,7 @@ namespace GameKatalog_MvvM.Views
 
         // Login Daten übernehmen
 
-        public RPGMenuView(
-            string username,
-            string userID)
+        public RPGMenuView(string username,string userID)
         {
             InitializeComponent();
 
@@ -40,14 +38,9 @@ namespace GameKatalog_MvvM.Views
 
         // Spiel starten
 
-        private void PlayButton_Click(
-            object sender,
-            RoutedEventArgs e)
+        private void PlayButton_Click(object sender,RoutedEventArgs e)
         {
-            RPGSpielView gameWindow =
-                new RPGSpielView(
-                    _loggedInUsername,
-                    _loggedInUserID);
+            RPGSpielView gameWindow = new RPGSpielView(_loggedInUsername,_loggedInUserID);
 
             gameWindow.Show();
 
@@ -56,13 +49,9 @@ namespace GameKatalog_MvvM.Views
 
         // Zurück zum Katalog
 
-        private void QuitButton_Click(
-            object sender,
-            RoutedEventArgs e)
+        private void QuitButton_Click(object sender,RoutedEventArgs e)
         {
-            KatalogView katalog =
-                new KatalogView(
-                    _loggedInUsername);
+            KatalogView katalog = new KatalogView(_loggedInUsername);
 
             katalog.Show();
 
