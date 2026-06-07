@@ -23,9 +23,7 @@ namespace GameKatalog_MvvM.Services
         {
             using (GameDbContext db = new GameDbContext())
             {
-                User user = db.Users.FirstOrDefault(x =>
-                    x.Username == username &&
-                    x.Password == password);
+                User user = db.Users.FirstOrDefault(x => x.Username == username && x.Password == password);
 
                 return user;
             }

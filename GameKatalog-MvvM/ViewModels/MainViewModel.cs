@@ -40,12 +40,15 @@ namespace GameKatalog_MvvM.ViewModels
                 OnPropertyChanged(nameof(Password));
             }
         }
-
+        //Buttons in WPF benutzen keine "Click"-Events mehr sondern sind auf LoginBefehl gebunden
         public ICommand LoginBefehl { get; set; }
+
+        //selbe beim erstellen von einem Accaount 
         public ICommand BenutzerErstellenBefehl { get; set; }
 
         public MainViewModel()
         {
+            //drücken vom Button starter die Methode 
             LoginBefehl = new ButtonBefehl(Login);
 
             BenutzerErstellenBefehl =
@@ -88,11 +91,12 @@ namespace GameKatalog_MvvM.ViewModels
 
             MessageBox.Show("Benutzer wurde erstellt!");
         }
-
+        //Event damit INotify funtioniert
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(string propertyName)
         {
+            //wird geprüft ob jemand aboniert hat wenn j a- View informirt bei änderungen 
             PropertyChanged?.Invoke(this,
                 new PropertyChangedEventArgs(propertyName));
         }
